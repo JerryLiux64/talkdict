@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" href="../static/img/NVIDIA.ico">
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <section class="content">
+        <header>
+            {% block header %}{% endblock %}
+        </header>
+        {% for msg in get_flashed_messages() %}
+            <div class="flash">{{ msg }}</div>
+        {% endfor %}
+        {% block content %}{% endblock %}
+    </section>
+    {% block script %}{% endblock %}
+</body>
+</html>

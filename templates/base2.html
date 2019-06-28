@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="table-responsive">
+            <div align="center">
+                <form enctype="multipart/form-data" method="POST"> 
+                    <input type="file" name="file">
+                    <input type="submit" value="Submit File" id="submit">
+                </form>
+            
+                {% for message in get_flashed_messages() %}
+                <div class="flash">{{ message }}</div>
+                {% endfor %}
+            </div>
+            <br />
+            <div id="word_table">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function(){
+        $('#submit').click(function(){
+            $.ajax({
+                url:'\\word.csv',
+                dataType: 'text',
+            }).done(loadtable);
+        });
+    });
+
+    function loadtable(data){
+        table = '<table>';
+        for(var row=0; row<5; row++){
+            if(row===0){
+                table += '<thead>';
+                table += '<tr>';
+            }
+            else{
+                table += '<tr>';
+            }
+            for(var rowCell = 0; rowCell < 2; rowCell++){
+                if(row === 0){
+                    table += '<th>';
+                    table += 'ABC';
+                    table += 'DEF';
+                    table += '</th>';
+                }
+                else{
+                    table += '<td>';
+                    table += 'FFF';
+                    table += 'EEE';
+                    table += '</td>'
+                }
+            }
+            table += '</tr>';
+            if(row === 0){
+                table += '</thead>';
+                table += '<tbody>';
+            }
+        }
+        table += '</tbody>';
+        table += '<table>';
+        $('#word_table').append(table);
+    }
+</script>

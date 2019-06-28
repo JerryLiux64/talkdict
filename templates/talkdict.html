@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block header %}
+<div align="center">
+    <h5>{% block title %}{{ filename }}{% endblock %}</h5>
+</div>
+{% endblock %}
+
+{% block content %}
+    <div align="center" id="table">
+        {{ text | safe }}
+    </div>
+{% endblock %}
+{% block script %}
+<script>
+    function sayword(word){
+        $.ajax({
+            type: 'GET',
+            url: {{ url_for('text_to_speech') |tojson }},
+            data: {word:word.innerHTML}
+        });
+    }
+</script>
+{% endblock %}
