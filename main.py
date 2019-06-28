@@ -1,8 +1,8 @@
 import os
 import csv
-from playsound import playsound
+# from playsound import playsound
 from gtts import gTTS
-from flask import Flask, flash, request, render_template, redirect, url_for
+from flask import Flask, flash, request, render_template, redirect, url_for, send_file
 from werkzeug.utils import secure_filename
 
 CWD = os.path.dirname(os.path.abspath(__file__))
@@ -44,7 +44,8 @@ def get_text_audio(word):
     if not os.path.isfile(filepath):
         tts = gTTS(word)
         tts.save(filepath)
-    playsound(filepath)
+    # playsound(filepath)
+    return filepath
                 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -88,8 +89,17 @@ def text_to_speech():
     if request.method == 'GET':
         word = request.args.get('word', type=str)
     app.logger.debug(word)
-    get_text_audio(word)
-    return '', 204
+    filepath = get_text_audio(word)
+    return f"/download?audio={word}.mp3"
+    # return "", 204
+
+@app.route('/download')
+def download():
+    if request.method == 'GET':
+        audio = request.args.get('audio', type=str)
+    app.logger.debug(audio)
+    return send_file(f"{app.config['AUDIO_UPLOAD_FOLDER']}\\{audio}", mimetype='audio/mpeg', as_attachment=True)
+    # return "", 204
 
 from flask import send_from_directory
 @app.route('/uploads/<filename>')

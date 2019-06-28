@@ -9,6 +9,9 @@
     <div align="center" id="table">
         {{ text | safe }}
     </div>
+    <audio controls style="display: none">
+        <source id="source" src="" type="audio/mpeg">
+    </audio>
 {% endblock %}
 {% block script %}
 <script>
@@ -16,7 +19,13 @@
         $.ajax({
             type: 'GET',
             url: {{ url_for('text_to_speech') |tojson }},
-            data: {word:word.innerHTML}
+            data: {word:word.innerHTML},
+            success: function(data){
+                console.log(data);
+                $('audio #source').attr('src', data);
+                $('audio').get(0).load();
+                $('audio').get(0).play();
+            }
         });
     }
 </script>
