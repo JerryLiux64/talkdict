@@ -98,7 +98,11 @@ def download():
     if request.method == 'GET':
         audio = request.args.get('audio', type=str)
     app.logger.debug(audio)
-    return send_file(f"{app.config['AUDIO_UPLOAD_FOLDER']}\\{audio}", mimetype='audio/mpeg', as_attachment=True)
+    filepath = os.path.abspath(os.path.join(app.config['AUDIO_UPLOAD_FOLDER'], audio))
+    if not os.path.isfile(filepath):
+        return "", 404
+
+    return send_file(filepath, mimetype='audio/mpeg', as_attachment=True)
     # return "", 204
 
 from flask import send_from_directory
