@@ -18,7 +18,7 @@
     function sayword(word){
         $.ajax({
             type: 'GET',
-            url: {{ url_for('text_to_speech') |tojson }},
+            url: {{ url_for('table.text_to_speech') |tojson }},
             data: {word:word.innerHTML},
             success: function(data){
                 console.log(data);
