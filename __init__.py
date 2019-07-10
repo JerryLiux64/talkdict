@@ -3,19 +3,6 @@ import os
 from flask import Flask, redirect, url_for
 
 def create_app(test_config=None):
-    # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY= os.urandom(32),
-        DATABASE=os.path.join(app.instance_path, 'talkdict.sqlite'),
-    )
-
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
-
     CWD = os.path.dirname(os.path.abspath(__file__))
     DICT_UPLOAD_FOLDER = os.path.abspath(os.path.join(CWD, 'data'))
     AUDIO_UPLOAD_FOLDER = os.path.abspath(os.path.join(DICT_UPLOAD_FOLDER, 'word_audio'))
@@ -27,12 +14,22 @@ def create_app(test_config=None):
     if not os.path.isdir(AUDIO_UPLOAD_FOLDER):
         os.makedirs(AUDIO_UPLOAD_FOLDER, exist_ok=True)
 
-    app = Flask(__name__)
+    app = Flask(__name__, instance_relative_config=True)
     app.config['ALLOWED_EXETENSIONS'] = ALLOWED_EXETENSIONS
     app.config['DICT_UPLOAD_FOLDER'] = DICT_UPLOAD_FOLDER
     app.config['AUDIO_UPLOAD_FOLDER'] = AUDIO_UPLOAD_FOLDER
     app.config['SECRET_KEY'] = os.urandom(55)
     app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+    app.config.from_mapping(
+        SECRET_KEY= os.urandom(32),
+        DATABASE=os.path.join(app.instance_path, 'talkdict.sqlite'),
+    )
+
+    # ensure the instance folder exists
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
 
     # a simple page that says hello
     @app.route('/hello')
