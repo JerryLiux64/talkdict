@@ -34,7 +34,17 @@ def upload_file():
                 current_app.logger.debug(f'{file.filename} is allowed')
                 filename = secure_filename(file.filename)
                 current_app.logger.debug(filename)
-                file.save(os.path.join(current_app.config['DICT_UPLOAD_FOLDER'], filename))
+                current_app.logger.info( g.user['username'])
+                userfolder = os.path.abspath(os.path.join(current_app.config['DICT_UPLOAD_FOLDER'], g.user['username']))
+                try:
+                    if not os.path.isdir(userfolder):
+                        os.makedirs(userfolder)
+                        current_app.logger.info(f'Create new folder for {g.user['username']} at {userfolder}.')
+                except OSError:
+                    error = '[OSError] Can not create user directory.'
+                 
+
+                file.save(os.path.abspath(os.path.join(userfolder, filename)))
                 return redirect(url_for('table.show_table', filename = filename))
             else:
                 error = 'File not allowed.'
