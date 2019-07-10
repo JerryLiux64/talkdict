@@ -4,6 +4,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <title>{% block title %}{% endblock %}</title>
     <link rel="icon" href="../static/img/pooh_icon.ico">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
         table, th, td {
             border: 1px solid black;
@@ -16,6 +17,20 @@
     </style>
 </head>
 <body>
+    <div class="nav">
+        <nav>
+            <h1>Talk Dict</h1>
+            <ul>
+                {% if g.user %}
+                    <li><span>{{ g.user['username'] }}</span>
+                    <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+                {% else %}
+                    <li><a href="{{ url_for('auth.register') }}">Register</a>
+                    <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
     <section class="content">
         <header>
             {% block header %}{% endblock %}
